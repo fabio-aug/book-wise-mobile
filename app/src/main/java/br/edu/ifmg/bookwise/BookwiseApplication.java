@@ -22,7 +22,7 @@ public class BookwiseApplication extends Application {
     }
 
     public BookwiseApi getApi() {
-        if (bookapi != null) return bookapi;
+        //if (bookapi != null) return bookapi;
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://book-wise-api.onrender.com/")
