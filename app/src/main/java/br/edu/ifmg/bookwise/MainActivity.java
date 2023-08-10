@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQ_ONE_TAP = 2;  // Can be any integer unique to the Activity.
     private boolean showOneTapUI = true;
     private BookwiseApplication app;
+
+    public void openHome(){
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                                         });
                                     }else{
                                         Log.d("deveria logar", String.valueOf(response.code()));
+                                        openHome();
                                     }
                                 }
 
