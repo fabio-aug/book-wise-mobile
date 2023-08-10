@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,10 +24,9 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.io.IOException;
-
 import br.edu.ifmg.bookwise.apimodel.BookwiseApi;
 import br.edu.ifmg.bookwise.classes.User;
+import br.edu.ifmg.bookwise.classes.UserLogin;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,42 +74,72 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("TAG", "Got ID token.");
                             String email = credential.getId();
                             String name = credential.getDisplayName();
-                            Toast.makeText(getApplicationContext(), "nome: "+name, Toast.LENGTH_LONG).show();
+
 
                             Retrofit retrofit = new Retrofit.Builder()
                                     .baseUrl("https://book-wise-api.onrender.com/")
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
-
                             BookwiseApi bookapi = retrofit.create(BookwiseApi.class);
+
                             User user = new User(name,email,email);
-                            // calling a method to create a post and passing our modal class.
-                            Call<User> call = bookapi.createPost(user);
-                            Log.d("user", user.getName());
-                            // on below line we are executing our method.
-                            call.enqueue(new Callback<User>() {
+                            UserLogin userLogin = new UserLogin(email,email);
+                            Call<UserLogin> callLogin = bookapi.login(userLogin);
+                            callLogin.enqueue(new Callback<UserLogin>() {
                                 @Override
-                                public void onResponse(Call<User> call, Response<User> response) {
+                                public void onResponse(Call<UserLogin> callLogin, Response<UserLogin> response) {
                                     // this method is called when we get response from our api.
-                                    Toast.makeText(MainActivity.this, "Data added to API", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Data received into API", Toast.LENGTH_SHORT).show();
 
                                     // we are getting response from our body
                                     // and passing it to our modal class.
-                                    User responseFromAPI = response.body();
+                                    UserLogin responseFromAPI = response.body();
 
                                     // on below line we are getting our data from modal class and adding it to our string.
                                     String responseString = "Response Code : " + response.code();
                                     Log.d("resposta api 1", response.toString());
+                                    if(response.code() == 500){
+                                        // calling a method to create a post and passing our modal class.
+                                        Call<User> call = bookapi.createUser(user);
+                                        Log.d("user", user.getName());
+                                        // on below line we are executing our method.
+                                        call.enqueue(new Callback<User>() {
+                                            @Override
+                                            public void onResponse(Call<User> call, Response<User> response) {
+                                                // this method is called when we get response from our api.
+                                                Toast.makeText(MainActivity.this, "Data added to API", Toast.LENGTH_SHORT).show();
+
+                                                // we are getting response from our body
+                                                // and passing it to our modal class.
+                                                User responseFromAPI = response.body();
+
+                                                // on below line we are getting our data from modal class and adding it to our string.
+                                                String responseString = "Response Code : " + response.code();
+                                                Log.d("resposta api 1", response.toString());
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<User> call, Throwable t) {
+                                                // setting text to our text view when
+                                                // we get error response from API.
+                                                Log.d("resposta api 2", t.getMessage());
+
+                                            }
+                                        });
+                                    }else{
+                                        Log.d("deveria logar", String.valueOf(response.code()));
+                                    }
                                 }
 
                                 @Override
-                                public void onFailure(Call<User> call, Throwable t) {
+                                public void onFailure(Call<UserLogin> call, Throwable t) {
                                     // setting text to our text view when
                                     // we get error response from API.
                                     Log.d("resposta api 2", t.getMessage());
 
                                 }
                             });
+
                         }
                     } catch (ApiException e) {
                         e.printStackTrace();

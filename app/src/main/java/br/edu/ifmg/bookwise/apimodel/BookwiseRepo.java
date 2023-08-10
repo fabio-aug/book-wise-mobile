@@ -14,7 +14,7 @@ public class BookwiseRepo {
 
     public User register(String name, String email, String password) throws IOException {
         User newUser = new User(name, email, password);
-        User u = api.createPost(newUser).execute().body();
+        User u = api.createUser(newUser).execute().body();
         return u;
     }
 }
