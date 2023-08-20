@@ -58,8 +58,8 @@
 
     <RatingBar
         android:id="@+id/averageReview"
-        android:layout_width="225dp"
-        android:layout_height="40dp"
+        android:layout_width="251dp"
+        android:layout_height="52dp"
         android:layout_marginTop="88dp"
         app:layout_constraintBottom_toTopOf="@+id/synopsis"
         app:layout_constraintEnd_toEndOf="parent"
