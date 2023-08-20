@@ -50,10 +50,10 @@ public class BookDetailsActivity extends AppCompatActivity {
     public void shareBook(String bookTitle, String author, String synopsis){
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Olá! Aqui está uma indicação de livro que você pode se interessar: \n"+
-                "O nome do livro é "+ bookTitle+
-                "\nDe "+author+
-                "E em resumo a estória é :"+synopsis);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "*Olá! Aqui está uma indicação de livro que você pode se interessar:* \n"+
+                "O nome do livro é *"+ bookTitle+
+                "*\nDe *"+author+
+                "*\nE em resumo a estória é :"+synopsis);
         sendIntent.setType("text/plain");
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
