@@ -15,7 +15,7 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BookDetailsActivity.class);
         intent.putExtra(BookDetailsActivity.ID, book.id);
         intent.putExtra(BookDetailsActivity.AUTHOR, book.author);
-        intent.putExtra(BookDetailsActivity.AVERAGEREVIEW, book.averageReview);
+        intent.putExtra(BookDetailsActivity.AVERAGE_REVIEW, book.averageReview);
         intent.putExtra(BookDetailsActivity.TITLE, book.title);
         intent.putExtra(BookDetailsActivity.SYNOPSIS, book.synopsis);
         intent.putExtra(BookDetailsActivity.IMAGE, book.image);
@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
         book.averageReview = 2.5f;
         book.title = "O Segredo de Feiurinha";
         book.synopsis = "A princesa Feiurinha sumiu misteriosamente! Como sua história não é muito conhecida pelas crianças, ela corre o risco de ser esquecida para sempre. Mas, para que isso não aconteça, todas as princesas encantadas se juntam para salvar a princesinha.";
-        book.image = "image";
+        book.image = "https://engsoftmoderna.info/figs/capa/capa-3d-principal.jpg";
         book.genders = null;
         book.sharing = 1;
         book.reviews = null;
