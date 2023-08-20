@@ -25,7 +25,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import br.edu.ifmg.bookwise.apimodel.BookwiseApi;
+import br.edu.ifmg.bookwise.apimodel.BookWiseApi;
 import br.edu.ifmg.bookwise.classes.User;
 import br.edu.ifmg.bookwise.classes.UserLogin;
 import retrofit2.Call;
@@ -41,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
     ImageView imgGoogle;
     private static final int REQ_ONE_TAP = 2;  // Can be any integer unique to the Activity.
     private boolean showOneTapUI = true;
-    private BookwiseApplication app;
+    private BookWiseApplication app;
 
-    public void openHome(){
+    public void openHome() {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        app = new BookwiseApplication();
+        app = new BookWiseApplication();
         imgGoogle = findViewById(R.id.googleSignIn);
 
         oneTapClient = Identity.getSignInClient(this);
@@ -68,92 +68,92 @@ public class MainActivity extends AppCompatActivity {
 
         ActivityResultLauncher<IntentSenderRequest> activityResultLauncher =
                 registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                if(result.getResultCode() == Activity.RESULT_OK){
-                    try {
-                        SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(result.getData());
-                        String idToken = credential.getGoogleIdToken();
-                        if (idToken !=  null) {
-                            // Got an ID token from Google. Use it to authenticate
-                            // with your backend.
-                            Log.d("TAG", "Got ID token.");
-                            String email = credential.getId();
-                            String name = credential.getDisplayName();
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            try {
+                                SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(result.getData());
+                                String idToken = credential.getGoogleIdToken();
+                                if (idToken != null) {
+                                    // Got an ID token from Google. Use it to authenticate
+                                    // with your backend.
+                                    Log.d("TAG", "Got ID token.");
+                                    String email = credential.getId();
+                                    String name = credential.getDisplayName();
 
 
-                            Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl("https://book-wise-api.onrender.com/")
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build();
-                            BookwiseApi bookapi = retrofit.create(BookwiseApi.class);
+                                    Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl("https://book-wise-api.onrender.com/")
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+                                    BookWiseApi bookapi = retrofit.create(BookWiseApi.class);
 
-                            User user = new User(name,email,email);
-                            UserLogin userLogin = new UserLogin(email,email);
-                            Call<UserLogin> callLogin = bookapi.login(userLogin);
-                            callLogin.enqueue(new Callback<UserLogin>() {
-                                @Override
-                                public void onResponse(Call<UserLogin> callLogin, Response<UserLogin> response) {
-                                    // this method is called when we get response from our api.
-                                    Toast.makeText(MainActivity.this, "Data received into API", Toast.LENGTH_SHORT).show();
+                                    User user = new User(name, email, email);
+                                    UserLogin userLogin = new UserLogin(email, email);
+                                    Call<UserLogin> callLogin = bookapi.login(userLogin);
+                                    callLogin.enqueue(new Callback<UserLogin>() {
+                                        @Override
+                                        public void onResponse(Call<UserLogin> callLogin, Response<UserLogin> response) {
+                                            // this method is called when we get response from our api.
+                                            Toast.makeText(MainActivity.this, "Data received into API", Toast.LENGTH_SHORT).show();
 
-                                    // we are getting response from our body
-                                    // and passing it to our modal class.
-                                    UserLogin responseFromAPI = response.body();
+                                            // we are getting response from our body
+                                            // and passing it to our modal class.
+                                            UserLogin responseFromAPI = response.body();
 
-                                    // on below line we are getting our data from modal class and adding it to our string.
-                                    String responseString = "Response Code : " + response.code();
-                                    Log.d("resposta api 1", response.toString());
-                                    if(response.code() == 500){
-                                        // calling a method to create a post and passing our modal class.
-                                        Call<User> call = bookapi.createUser(user);
-                                        Log.d("user", user.getName());
-                                        // on below line we are executing our method.
-                                        call.enqueue(new Callback<User>() {
-                                            @Override
-                                            public void onResponse(Call<User> call, Response<User> response) {
-                                                // this method is called when we get response from our api.
-                                                Toast.makeText(MainActivity.this, "Data added to API", Toast.LENGTH_SHORT).show();
+                                            // on below line we are getting our data from modal class and adding it to our string.
+                                            String responseString = "Response Code : " + response.code();
+                                            Log.d("resposta api 1", response.toString());
+                                            if (response.code() == 500) {
+                                                // calling a method to create a post and passing our modal class.
+                                                Call<User> call = bookapi.createUser(user);
+                                                Log.d("user", user.getName());
+                                                // on below line we are executing our method.
+                                                call.enqueue(new Callback<User>() {
+                                                    @Override
+                                                    public void onResponse(Call<User> call, Response<User> response) {
+                                                        // this method is called when we get response from our api.
+                                                        Toast.makeText(MainActivity.this, "Data added to API", Toast.LENGTH_SHORT).show();
 
-                                                // we are getting response from our body
-                                                // and passing it to our modal class.
-                                                User responseFromAPI = response.body();
+                                                        // we are getting response from our body
+                                                        // and passing it to our modal class.
+                                                        User responseFromAPI = response.body();
 
-                                                // on below line we are getting our data from modal class and adding it to our string.
-                                                String responseString = "Response Code : " + response.code();
-                                                Log.d("resposta api 1", response.toString());
+                                                        // on below line we are getting our data from modal class and adding it to our string.
+                                                        String responseString = "Response Code : " + response.code();
+                                                        Log.d("resposta api 1", response.toString());
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<User> call, Throwable t) {
+                                                        // setting text to our text view when
+                                                        // we get error response from API.
+                                                        Log.d("resposta api 2", t.getMessage());
+
+                                                    }
+                                                });
+                                            } else {
+                                                Log.d("deveria logar", String.valueOf(response.code()));
+                                                openHome();
                                             }
+                                        }
 
-                                            @Override
-                                            public void onFailure(Call<User> call, Throwable t) {
-                                                // setting text to our text view when
-                                                // we get error response from API.
-                                                Log.d("resposta api 2", t.getMessage());
+                                        @Override
+                                        public void onFailure(Call<UserLogin> call, Throwable t) {
+                                            // setting text to our text view when
+                                            // we get error response from API.
+                                            Log.d("resposta api 2", t.getMessage());
 
-                                            }
-                                        });
-                                    }else{
-                                        Log.d("deveria logar", String.valueOf(response.code()));
-                                        openHome();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<UserLogin> call, Throwable t) {
-                                    // setting text to our text view when
-                                    // we get error response from API.
-                                    Log.d("resposta api 2", t.getMessage());
+                                        }
+                                    });
 
                                 }
-                            });
-
+                            } catch (ApiException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    } catch (ApiException e) {
-                        e.printStackTrace();
                     }
-                }
-            }
-        });
+                });
         imgGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import br.edu.ifmg.bookwise.classes.User;
 
-public class BookwiseRepo {
+public class BookWiseRepo {
 
-    private BookwiseApi api;
+    private BookWiseApi api;
 
-    public BookwiseRepo(BookwiseApi api) {
+    public BookWiseRepo(BookWiseApi api) {
         this.api = api;
     }
 
