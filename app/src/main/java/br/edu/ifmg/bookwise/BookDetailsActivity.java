@@ -9,7 +9,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 
+import br.edu.ifmg.bookwise.databinding.BookDetailsBinding;
+
 public class BookDetailsActivity extends AppCompatActivity {
+    public static final String ID = "BookDetailsActivity_Book_Id";
     TextView bookTitle, author, synopsis, genders, averageReview;
     Button share;
     ImageView image;
@@ -17,7 +20,8 @@ public class BookDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.book_details);
+        BookDetailsBinding binding = BookDetailsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         bookTitle = findViewById(R.id.booktitle);
         author = findViewById(R.id.author);
         synopsis = findViewById(R.id.synopsis);
