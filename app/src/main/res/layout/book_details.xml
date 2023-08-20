@@ -84,6 +84,15 @@
                 android:numStars="5"
                 android:rating="2.5" />
 
+            <Button
+                android:id="@+id/share"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Compartilhar" />
+
         </LinearLayout>
     </ScrollView>
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,5 +38,24 @@ public class BookDetailsActivity extends AppCompatActivity {
         Picasso.get().load(intent.getStringExtra(IMAGE)).into(binding.image);
         binding.averageReview.setNumStars(5);
         binding.averageReview.setRating(intent.getFloatExtra(AVERAGE_REVIEW, 0));
+        Button share = findViewById(R.id.share);
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareBook(intent.getStringExtra(TITLE),intent.getStringExtra(AUTHOR),intent.getStringExtra(SYNOPSIS));
+            }
+        });
+    }
+
+    public void shareBook(String bookTitle, String author, String synopsis){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Olá! Aqui está uma indicação de livro que você pode se interessar: \n"+
+                "O nome do livro é "+ bookTitle+
+                "\nDe "+author+
+                "E em resumo a estória é :"+synopsis);
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 }
