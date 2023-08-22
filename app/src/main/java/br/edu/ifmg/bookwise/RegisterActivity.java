@@ -1,35 +1,19 @@
 package br.edu.ifmg.bookwise;
 
+import android.util.Log;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import br.edu.ifmg.bookwise.databinding.RegisterBinding;
 
 public class RegisterActivity extends AppCompatActivity {
-
-    EditText name, email, password;
-    Button submit;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RegisterBinding binding = RegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        name = findViewById(R.id.editTextName);
-        email = findViewById(R.id.editTextEmail);
-        password = findViewById(R.id.editTextPassword);
-        submit = findViewById(R.id.btnRegister);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+        binding.btnRegister.setOnClickListener(view -> Log.d("RegisterActivity", "RA"));
     }
-
 }

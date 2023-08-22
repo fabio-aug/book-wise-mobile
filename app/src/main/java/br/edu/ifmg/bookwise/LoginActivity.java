@@ -1,39 +1,38 @@
 package br.edu.ifmg.bookwise;
 
+import androidx.annotation.NonNull;
 import androidx.activity.result.ActivityResult;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.app.Activity;
 import android.widget.Toast;
+import android.content.Intent;
 
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 
-import br.edu.ifmg.bookwise.apimodel.BookWiseApi;
-import br.edu.ifmg.bookwise.classes.User;
-import br.edu.ifmg.bookwise.classes.UserLogin;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import br.edu.ifmg.bookwise.classes.User;
+import br.edu.ifmg.bookwise.classes.UserLogin;
+import br.edu.ifmg.bookwise.apimodel.BookWiseApi;
 import br.edu.ifmg.bookwise.databinding.LoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
@@ -91,11 +90,11 @@ public class LoginActivity extends AppCompatActivity {
                                                 .baseUrl("https://book-wise-api.onrender.com/")
                                                 .addConverterFactory(GsonConverterFactory.create())
                                                 .build();
-                                        BookWiseApi bookapi = retrofit.create(BookWiseApi.class);
+                                        BookWiseApi bookApi = retrofit.create(BookWiseApi.class);
 
                                         User user = new User(name, email, email);
                                         UserLogin userLogin = new UserLogin(email, email);
-                                        Call<UserLogin> callLogin = bookapi.login(userLogin);
+                                        Call<UserLogin> callLogin = bookApi.login(userLogin);
                                         callLogin.enqueue(new Callback<UserLogin>() {
                                             @Override
                                             public void onResponse(Call<UserLogin> callLogin, Response<UserLogin> response) {
@@ -111,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 Log.d("resposta api 1", response.toString());
                                                 if (response.code() == 500) {
                                                     // calling a method to create a post and passing our modal class.
-                                                    Call<User> call = bookapi.createUser(user);
+                                                    Call<User> call = bookApi.createUser(user);
                                                     Log.d("user", user.getName());
                                                     // on below line we are executing our method.
                                                     call.enqueue(new Callback<User>() {

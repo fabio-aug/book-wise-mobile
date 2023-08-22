@@ -1,7 +1,6 @@
 package br.edu.ifmg.bookwise.classes;
 
 public class UserLogin {
-
     private String email;
     private String password;
 

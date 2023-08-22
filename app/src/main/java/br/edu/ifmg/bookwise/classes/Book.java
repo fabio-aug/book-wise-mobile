@@ -6,9 +6,17 @@ public class Book {
     public String author;
     public String synopsis;
     public String image;
-    public Integer sharing;
     public Float averageReview;
-    public Review[] reviews;
     public Gender[] genders;
+
+    public Book(Integer id, String title, String author, String synopsis, String image, Float averageReview, Gender[] genders) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.synopsis = synopsis;
+        this.image = image;
+        this.averageReview = averageReview;
+        this.genders = genders;
+    }
 }
 

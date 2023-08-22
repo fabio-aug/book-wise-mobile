@@ -6,36 +6,46 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
-import br.edu.ifmg.bookwise.apimodel.BookWiseRepo;
 import retrofit2.Retrofit;
+import br.edu.ifmg.bookwise.classes.User;
 import br.edu.ifmg.bookwise.apimodel.BookWiseApi;
+import br.edu.ifmg.bookwise.apimodel.BookWiseRepo;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BookWiseApplication extends Application {
     private ExecutorService executorService = Executors.newFixedThreadPool(1);
-    private BookWiseApi bookapi;
+    private BookWiseApi bookApi;
     private BookWiseRepo bookWiseRepo;
+    private User user;
 
     public Executor getExecutor() {
         return executorService;
     }
 
     public BookWiseApi getApi() {
-        //if (bookapi != null) return bookapi;
+        if (this.bookApi != null) return this.bookApi;
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://book-wise-api.onrender.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        bookapi = retrofit.create(BookWiseApi.class);
+        this.bookApi = retrofit.create(BookWiseApi.class);
 
-        return bookapi;
+        return this.bookApi;
     }
 
     public BookWiseRepo getBookWiseRepo() {
-        if (bookWiseRepo != null) return bookWiseRepo;
+        if (this.bookWiseRepo != null) return this.bookWiseRepo;
 
-        bookWiseRepo = new BookWiseRepo(getApi());
-        return bookWiseRepo;
+        this.bookWiseRepo = new BookWiseRepo(getApi());
+        return this.bookWiseRepo;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
