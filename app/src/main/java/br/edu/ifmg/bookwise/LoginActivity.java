@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import br.edu.ifmg.bookwise.classes.User;
 import br.edu.ifmg.bookwise.classes.UserLogin;
-import br.edu.ifmg.bookwise.apimodel.BookWiseApi;
+import br.edu.ifmg.bookwise.api.BookWiseApi;
 import br.edu.ifmg.bookwise.databinding.LoginBinding;
 
 public class LoginActivity extends AppCompatActivity {

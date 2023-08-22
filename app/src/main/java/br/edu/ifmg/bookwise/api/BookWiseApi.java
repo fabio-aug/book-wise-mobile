@@ -1,4 +1,4 @@
-package br.edu.ifmg.bookwise.apimodel;
+package br.edu.ifmg.bookwise.api;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

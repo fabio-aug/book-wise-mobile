@@ -8,8 +8,8 @@ import java.util.concurrent.ExecutorService;
 
 import retrofit2.Retrofit;
 import br.edu.ifmg.bookwise.classes.User;
-import br.edu.ifmg.bookwise.apimodel.BookWiseApi;
-import br.edu.ifmg.bookwise.apimodel.BookWiseRepo;
+import br.edu.ifmg.bookwise.api.BookWiseApi;
+import br.edu.ifmg.bookwise.api.BookWiseRepo;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BookWiseApplication extends Application {

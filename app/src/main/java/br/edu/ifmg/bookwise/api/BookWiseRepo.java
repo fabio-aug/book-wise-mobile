@@ -1,4 +1,4 @@
-package br.edu.ifmg.bookwise.apimodel;
+package br.edu.ifmg.bookwise.api;
 
 import java.io.IOException;
 
