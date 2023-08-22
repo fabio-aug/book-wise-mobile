@@ -2,6 +2,7 @@ package br.edu.ifmg.bookwise;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.os.Bundle;
 import android.content.Intent;
 
@@ -10,10 +11,13 @@ import java.util.Objects;
 
 import com.squareup.picasso.Picasso;
 
-import br.edu.ifmg.bookwise.classes.Book;
 import br.edu.ifmg.bookwise.classes.User;
+import br.edu.ifmg.bookwise.classes.Book;
 import br.edu.ifmg.bookwise.classes.Gender;
 import br.edu.ifmg.bookwise.classes.Review;
+import br.edu.ifmg.bookwise.classes.ReviewOutput;
+import br.edu.ifmg.bookwise.classes.CreateReviewInput;
+import br.edu.ifmg.bookwise.classes.UpdateReviewInput;
 import br.edu.ifmg.bookwise.databinding.BookDetailsBinding;
 
 public class BookDetailsActivity extends AppCompatActivity {
@@ -25,6 +29,8 @@ public class BookDetailsActivity extends AppCompatActivity {
     public static final String IMAGE = "BookDetailsActivity_Book_Image";
     public static final String GENDERS = "BookDetailsActivity_Book_Genders";
     private Book book;
+    private Review review;
+    private User currentUser;
     private BookWiseApplication app;
 
     @Override
@@ -51,26 +57,81 @@ public class BookDetailsActivity extends AppCompatActivity {
         binding.synopsis.setText(this.book.synopsis);
         Picasso.get().load(this.book.image).into(binding.image);
         binding.genders.setText(Gender.renderArrayObjects(this.book.genders));
-        binding.averageReview.setText(this.book.averageReview+"⭐");
-        User currentUser = this.app.getUser();
+        binding.averageReview.setText(this.book.averageReview + "⭐");
+
+        this.currentUser = this.app.getUser();
         if (currentUser != null) {
-            Review review = Arrays.stream(currentUser.reviews)
+            this.review = Arrays.stream(currentUser.reviews)
                     .filter(e -> Objects.equals(e.idBook, this.book.id))
                     .findAny()
                     .orElse(null);
 
-            if (review != null) {
-                binding.stars.setRating(review.stars);
+            if (this.review != null) {
+                binding.stars.setRating(this.review.stars);
             } else {
                 binding.stars.setRating(0);
             }
         }
+
+        binding.stars.setOnRatingBarChangeListener((a, b, c) -> onChangeStars(b, c));
 
         binding.share.setOnClickListener(v -> shareBook(
                 this.book.title,
                 this.book.author,
                 this.book.synopsis
         ));
+    }
+
+    public void onChangeStars(float newValue, boolean isUser) {
+        if (isUser) {
+            if (this.review != null) {
+                this.app.getExecutor().execute(() -> {
+                    try {
+                        ReviewOutput ro = app.getBookWiseRepo().updateReview(
+                                new UpdateReviewInput(this.review.id, newValue)
+                        );
+                        if (ro != null && ro.data != null) {
+                            Review[] aux = new Review[this.currentUser.reviews.length];
+                            for (int i = 0; i < aux.length; i++) {
+                                aux[i] = this.currentUser.reviews[i];
+                                if (Objects.equals(this.review.id, aux[i].id)) {
+                                    aux[i].stars = newValue;
+                                }
+                            }
+
+                            this.review = ro.data;
+                            this.currentUser.reviews = aux;
+                            this.app.setUser(this.currentUser);
+                        }
+                    } catch (Exception e) {
+                        Log.d("onChangeStars", e.getMessage());
+                        Log.d("onChangeStars", "onChangeStars-update-error");
+                    }
+                });
+            } else {
+                this.app.getExecutor().execute(() -> {
+                    try {
+                        ReviewOutput ro = app.getBookWiseRepo().createReview(
+                                new CreateReviewInput(newValue, this.book.id, this.app.getUser().id)
+                        );
+                        if (ro != null && ro.data != null) {
+                            Review[] aux = new Review[this.currentUser.reviews.length + 1];
+                            for (int i = 0; i < this.currentUser.reviews.length; i++) {
+                                aux[i] = this.currentUser.reviews[i];
+                            }
+                            aux[aux.length - 1] = ro.data;
+
+                            this.review = ro.data;
+                            this.currentUser.reviews = aux;
+                            this.app.setUser(this.currentUser);
+                        }
+                    } catch (Exception e) {
+                        Log.d("onChangeStars", e.getMessage());
+                        Log.d("onChangeStars", "onChangeStars-create-error");
+                    }
+                });
+            }
+        }
     }
 
     public void shareBook(String bookTitle, String author, String synopsis) {

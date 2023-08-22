@@ -13,7 +13,7 @@ import br.edu.ifmg.bookwise.api.BookWiseRepo;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BookWiseApplication extends Application {
-    private ExecutorService executorService = Executors.newFixedThreadPool(1);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(1);
     private BookWiseApi bookApi;
     private BookWiseRepo bookWiseRepo;
     private User user;
@@ -22,22 +22,16 @@ public class BookWiseApplication extends Application {
         return executorService;
     }
 
-    public BookWiseApi getApi() {
-        if (this.bookApi != null) return this.bookApi;
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://book-wise-api.onrender.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        this.bookApi = retrofit.create(BookWiseApi.class);
-
-        return this.bookApi;
-    }
-
     public BookWiseRepo getBookWiseRepo() {
         if (this.bookWiseRepo != null) return this.bookWiseRepo;
 
-        this.bookWiseRepo = new BookWiseRepo(getApi());
+        BookWiseApi api = new Retrofit.Builder()
+                .baseUrl("https://book-wise-api.onrender.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(BookWiseApi.class);
+
+        this.bookWiseRepo = new BookWiseRepo(api);
         return this.bookWiseRepo;
     }
 
