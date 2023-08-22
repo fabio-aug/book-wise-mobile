@@ -1,6 +1,7 @@
 package br.edu.ifmg.bookwise.classes;
 
 public class User {
+    public int id;
     public String name;
     public String email;
     public String password;

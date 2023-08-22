@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import br.edu.ifmg.bookwise.classes.Book;
 import br.edu.ifmg.bookwise.classes.Gender;
+import br.edu.ifmg.bookwise.classes.Review;
+import br.edu.ifmg.bookwise.classes.User;
 import br.edu.ifmg.bookwise.databinding.HomeBinding;
 
 public class HomeActivity extends AppCompatActivity {
@@ -28,8 +30,15 @@ public class HomeActivity extends AppCompatActivity {
         HomeBinding binding = HomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        BookWiseApplication app = (BookWiseApplication) getApplication();
+
+        User user = new User("Admin - Fábio", "fabio@admin.com", "admin");
+        user.id = 1;
+        user.reviews = new Review[]{ new Review(1, 1,1, 3f) };
+        app.setUser(user);
+
         Book book = new Book(
-                1,
+                2,
                 "O Segredo de Almoçar",
                 "Luana Assis",
                 "A princesa Almoçar sumiu misteriosamente! Como sua história não é muito conhecida pelas crianças, ela corre o risco de ser esquecida para sempre. Mas, para que isso não aconteça, todas as princesas encantadas se juntam para salvar a princesinha.",
