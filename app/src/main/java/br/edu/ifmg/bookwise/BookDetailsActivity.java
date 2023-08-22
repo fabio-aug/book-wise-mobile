@@ -51,7 +51,7 @@ public class BookDetailsActivity extends AppCompatActivity {
         binding.synopsis.setText(this.book.synopsis);
         Picasso.get().load(this.book.image).into(binding.image);
         binding.genders.setText(Gender.renderArrayObjects(this.book.genders));
-
+        binding.averageReview.setText(this.book.averageReview+"⭐");
         User currentUser = this.app.getUser();
         if (currentUser != null) {
             Review review = Arrays.stream(currentUser.reviews)
@@ -60,9 +60,9 @@ public class BookDetailsActivity extends AppCompatActivity {
                     .orElse(null);
 
             if (review != null) {
-                binding.averageReview.setRating(review.stars);
+                binding.stars.setRating(review.stars);
             } else {
-                binding.averageReview.setRating(0);
+                binding.stars.setRating(0);
             }
         }
 
