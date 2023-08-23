@@ -14,6 +14,6 @@ public interface BookWiseApi {
         @POST("user/create")
         Call<User> createUser(@Body User user);
 
-        @GET("book/getRandomBook")
+        @GET("book/getRandomBook") //mudar "book/getRandomBook"
         Call<Book> loadBooks();
 }
