@@ -2,12 +2,12 @@ package br.edu.ifmg.bookwise;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 import android.util.Log;
 import android.os.Bundle;
 import android.content.Intent;
-
-import java.util.Arrays;
-import java.util.Objects;
 
 import com.squareup.picasso.Picasso;
 
