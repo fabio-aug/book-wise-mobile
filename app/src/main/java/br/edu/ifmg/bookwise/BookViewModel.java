@@ -2,6 +2,7 @@ package br.edu.ifmg.bookwise;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -31,17 +32,18 @@ public class BookViewModel extends ViewModel {
     public BookViewModel(BookWiseApplication app) {
         this.app = app;
         loading = new MutableLiveData<>(View.GONE);
-        books = new ArrayList<>();
+        books = new ArrayList<Book>();
         title = new MutableLiveData<>();
         author = new MutableLiveData<>();
         image = new MutableLiveData<>();
     }
 
-    public void loadBook(Book book){
+    public void loadBook(){
         loading.setValue(View.VISIBLE);
         app.getExecutor().execute(() -> {
             try {
                 Book b = app.getBookWiseRepo().LoadBooks();
+
                 title.postValue(b.title);
                 title.postValue(b.author);
                 image.postValue(b.image);

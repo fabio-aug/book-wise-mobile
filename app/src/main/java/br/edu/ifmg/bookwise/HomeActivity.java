@@ -23,6 +23,10 @@ public class HomeActivity extends AppCompatActivity {
 
         vm.getLoading().observe(this, (newV) -> binding.progressBar.setVisibility(newV));
 
+        //binding.books.setLayoutManager(new LinearLayoutManager(this));
+        //binding.books.setAdapter(adapter);
+
+        //vm.loadBook();
 
     }
 }
