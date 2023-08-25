@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private BookWiseApplication app;
     private SignInClient oneTapClient;
     private BeginSignInRequest signUpRequest;
+    private LoginBinding binding;
 
     public void openHome(User user) {
         app.setUser(user);
@@ -38,10 +39,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LoginBinding binding = LoginBinding.inflate(getLayoutInflater());
+        this.binding = LoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         this.app = (BookWiseApplication) getApplication();
+
+        this.binding.btnRegister.setOnClickListener(v -> manualLogin());
 
         oneTapClient = Identity.getSignInClient(this);
         signUpRequest = BeginSignInRequest.builder()
@@ -62,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                                 String email = credential.getId();
                                 String name = credential.getDisplayName();
 
-                                app.getExecutor().execute(() -> {
+                                this.app.getExecutor().execute(() -> {
                                     try {
                                         UserOutput uo1 = app.getBookWiseRepo().loginUser(new UserLogin(email, email));
                                         if (uo1 != null && uo1.data != null) {
@@ -84,12 +87,28 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
-        binding.googleSignIn.setOnClickListener(view -> oneTapClient.beginSignIn(signUpRequest)
+        this.binding.googleSignIn.setOnClickListener(view -> oneTapClient.beginSignIn(signUpRequest)
                 .addOnSuccessListener(LoginActivity.this, result -> {
                     IntentSenderRequest intentSenderRequest =
                             new IntentSenderRequest.Builder(result.getPendingIntent().getIntentSender()).build();
                     activityResultLauncher.launch(intentSenderRequest);
                 })
                 .addOnFailureListener(LoginActivity.this, e -> Log.d("TAG", e.getLocalizedMessage())));
+    }
+
+    public void manualLogin() {
+        String email = String.valueOf(this.binding.editTextEmail.getText());
+        String password = String.valueOf(this.binding.editTextPassword.getText());
+
+        this.app.getExecutor().execute(() -> {
+            try {
+                UserOutput uo1 = this.app.getBookWiseRepo().loginUser(new UserLogin(email, password));
+                if (uo1 != null && uo1.data != null) {
+                    openHome(uo1.data);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
