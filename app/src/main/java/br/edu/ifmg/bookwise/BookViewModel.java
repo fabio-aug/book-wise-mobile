@@ -1,29 +1,26 @@
 package br.edu.ifmg.bookwise;
 
-import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
-
-import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
+import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import br.edu.ifmg.bookwise.classes.Book;
+import br.edu.ifmg.bookwise.classes.BookOutput;
 
 public class BookViewModel extends ViewModel {
-
     private BookWiseApplication app;
     private MutableLiveData<Integer> loading;
     private ArrayList<Book> books;
     private MutableLiveData<String> title;
     private MutableLiveData<String> author;
     private MutableLiveData<String> image;
-
 
     public static ViewModelInitializer<BookViewModel> initializer = new ViewModelInitializer<>(
             BookViewModel.class,
@@ -42,11 +39,11 @@ public class BookViewModel extends ViewModel {
         loading.setValue(View.VISIBLE);
         app.getExecutor().execute(() -> {
             try {
-                Book b = app.getBookWiseRepo().LoadBooks();
+                BookOutput b = app.getBookWiseRepo().searchBook("", 1, 10, 0);
 
-                title.postValue(b.title);
-                title.postValue(b.author);
-                image.postValue(b.image);
+                title.postValue(b.data[0].title);
+                title.postValue(b.data[0].author);
+                image.postValue(b.data[0].image);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);

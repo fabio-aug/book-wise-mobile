@@ -1,29 +1,25 @@
-package br.edu.ifmg.bookwise.apimodel;
+package br.edu.ifmg.bookwise;
 
-import android.view.LayoutInflater;
+import java.util.ArrayList;
+
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ImageView;
+import android.view.LayoutInflater;
+
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-
-import br.edu.ifmg.bookwise.R;
 import br.edu.ifmg.bookwise.classes.Book;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
-
     private ArrayList<Book> books;
 
     public BookAdapter(ArrayList<Book> books) {
         this.books = books;
-
     }
 
     @NonNull
